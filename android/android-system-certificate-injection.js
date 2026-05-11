@@ -60,24 +60,32 @@ Java.perform(() => {
             }
         }
 
-        TrustedCertificateIndex.$init.overloads.forEach((overload) => {
-            overload.implementation = function () {
-                this.$init(...arguments);
-                // Index our cert as already trusted, right from the start:
-                this.index(cert);
-            }
-        });
+        try {
+            TrustedCertificateIndex.$init.overloads.forEach((overload) => {
+                overload.implementation = function () {
+                    this.$init(...arguments);
+                    // Index our cert as already trusted, right from the start:
+                    this.index(cert);
+                }
+            });
 
-        TrustedCertificateIndex.reset.overloads.forEach((overload) => {
-            overload.implementation = function () {
-                const result = this.reset(...arguments);
-                // Index our cert in here again, since the reset removes it:
-                this.index(cert);
-                return result;
-            };
-        });
+            TrustedCertificateIndex.reset.overloads.forEach((overload) => {
+                overload.implementation = function () {
+                    const result = this.reset(...arguments);
+                    // Index our cert in here again, since the reset removes it:
+                    this.index(cert);
+                    return result;
+                };
+            });
 
-        if (DEBUG_MODE) console.log(`[+] Injected cert into ${TrustedCertificateIndexClassname}`);
+            if (DEBUG_MODE) console.log(`[+] Injected cert into ${TrustedCertificateIndexClassname}`);
+        } catch (e) {
+            console.error(`[!] Error hooking system certificates via ${TrustedCertificateIndexClassname}:`);
+            console.error(DEBUG_MODE
+                ? e
+                : '    ' + e.message
+            );
+        }
     });
 
     // This effectively adds us to the system certs, and also defeats quite a bit of basic certificate
