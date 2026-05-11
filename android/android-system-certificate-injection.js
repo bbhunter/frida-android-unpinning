@@ -43,7 +43,8 @@ Java.perform(() => {
     [
         'com.android.org.conscrypt.TrustedCertificateIndex',
         'org.conscrypt.TrustedCertificateIndex', // Might be used (com.android is synthetic) - unclear
-        'org.apache.harmony.xnet.provider.jsse.TrustedCertificateIndex' // Used in Apache Harmony version of Conscrypt
+        'org.apache.harmony.xnet.provider.jsse.TrustedCertificateIndex', // Used in Apache Harmony version of Conscrypt
+        'com.google.android.gms.org.conscrypt.TrustedCertificateIndex', // Google Play Services bundled Conscrypt
     ].forEach((TrustedCertificateIndexClassname, i) => {
         let TrustedCertificateIndex;
         try {
